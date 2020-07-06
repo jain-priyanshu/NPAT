@@ -49,7 +49,8 @@ io.on('connect', (socket) => {
         else if(c == 3){
             socket.join(data.room)
             socket.broadcast.to(data.room).emit('dltWait')
-            io.emit('start')
+            io.to(data.room).emit('start', {players : players, room : data.room})
+            io.to(data.room).emit('getMainForm')
             socket.emit('removeRoomForm')
         }
         else{
@@ -57,6 +58,14 @@ io.on('connect', (socket) => {
             socket.emit('removeRoomForm')
             socket.emit('wait')
         }
+    })
+
+    socket.on('sendMainForm', (data) => {
+        console.log(data.name, data.place, data.animal, data.things)
+        player.answers.name = data.name
+        player.answers.place = data.place
+        player.answers.animal = data.animal
+        player.answers.things = data.things
     })
 })
 

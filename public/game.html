@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="first">
-        <form id="room-form" class="room-form">
+        <form id="room-form">
             <input type="text" required placeholder="Enter Name" id="player-name">
             <input type="text" required placeholder="Room Name" id="room-name">
             <button type="submit">Enter</button>
@@ -20,9 +20,18 @@
         <div class="wait">
             Waiting For Other Players
         </div>
-        <div class="start">
-            Game Started
-        </div>
+    </div>
+    <div class="start">
+        <div class="roomMsg"></div>
+        Players:
+        <ul class="name-list"></ul>
+        <form id="main-form">
+            <input type="text" required placeholder="Name" id="name">
+            <input type="text" required placeholder="Place" id="place">
+            <input type="text" required placeholder="Animal" id="animal">
+            <input type="text" required placeholder="Things" id="things">
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </body>
 </html>
