@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPAT</title>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="css/main.css" />
+    <script defer src="client.js"></script>
+</head>
+<body>
+    <div class="first">
+        <form id="room-form" class="room-form">
+            <input type="text" required placeholder="Enter Name" id="player-name">
+            <input type="text" required placeholder="Room Name" id="room-name">
+            <button type="submit">Enter</button>
+        </form>
+    </div>
+    <div class="overlay">
+        <div class="wait">
+            Waiting For Other Players
+        </div>
+        <div class="start">
+            Game Started
+        </div>
+    </div>
+</body>
+</html>
