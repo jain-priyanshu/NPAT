@@ -7,6 +7,8 @@ const {
     players,
     joinPlayer,
     removePlayer,
+    order,
+    removePlayerFromOrder
 } = require('./data/player')
 const { join } = require('path')
 
@@ -24,6 +26,7 @@ io.on('connect', (socket) => {
 
     socket.on('disconnect', () => {
         removePlayer(socket.id)
+        removePlayerFromOrder(socket.id)
     })
 
     const player = joinPlayer(socket.id)
@@ -50,7 +53,7 @@ io.on('connect', (socket) => {
             socket.join(data.room)
             socket.broadcast.to(data.room).emit('dltWait')
             io.to(data.room).emit('start', {players : players, room : data.room})
-            io.to(data.room).emit('getMainForm')
+            io.to(data.room).emit('getMainForm', {room : data.room})
             socket.emit('removeRoomForm')
         }
         else{
@@ -66,6 +69,23 @@ io.on('connect', (socket) => {
         player.answers.place = data.place
         player.answers.animal = data.animal
         player.answers.things = data.things
+        let c = 0
+        for(let i = 0; i < players.length; i++){
+            if(players[i].room == data.room && players[i].answers.name == null){
+                c++
+            }
+        }
+        if(c > 0){
+            order.push(player)
+            socket.emit('removeMainForm')
+            socket.emit('wait')
+        }
+        else{
+            order.push(player)
+            socket.emit('removeMainForm')
+            socket.broadcast.to(data.room).emit('dltWait')
+            io.to(data.room).emit('getVoteForm', {order : order, room : data.room})
+        }
     })
 })
 
