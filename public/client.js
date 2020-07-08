@@ -9,9 +9,9 @@ const place = document.getElementById('place')
 const animal = document.getElementById('animal')
 const things = document.getElementById('things')
 const nameResult = document.getElementById('name-result')
-const placeResult = document.getElementById('placeResult')
-const animalResult = document.getElementById('animalResult')
-const thingsResult = document.getElementById('thingsResult')
+const placeResult = document.getElementById('place-result')
+const animalResult = document.getElementById('animal-result')
+const thingsResult = document.getElementById('things-result')
 
 var first = document.querySelector('.first')
 var wait = document.querySelector('.wait')
@@ -86,6 +86,9 @@ socket.on('getMainForm', (data) => {
         things.value = ''
     }
     mainForm.addEventListener('submit', getMain)
+    socket.on('mainAgain', () => {
+        mainForm.removeEventListener('submit', getMain)
+    })
 })
 
 socket.on('removeMainForm', () => {
@@ -93,8 +96,10 @@ socket.on('removeMainForm', () => {
 })
 
 socket.on('getVoteForm', (data) => {
+    let beingVoted = null;
     for(let i = 0; i < data.order.length; i++){
         if(data.order[i].room == data.room){
+            beingVoted = data.order[i]
             nameVote.innerHTML = data.order[i].answers.name
             placeVote.innerHTML = data.order[i].answers.place
             animalVote.innerHTML = data.order[i].answers.animal
@@ -103,5 +108,21 @@ socket.on('getVoteForm', (data) => {
             break;
         }
     }
-    
+    var getVote = function(event){
+        event.preventDefault()
+        console.log(nameResult.checked, placeResult.checked, animalResult.checked, thingsResult.checked)
+        socket.emit('sendVoteForm', {
+            beingVoted : beingVoted,
+            result_arr : [nameResult.checked, placeResult.checked, animalResult.checked, thingsResult.checked],
+            room : data.room
+        })
+    }
+    voteForm.addEventListener('submit', getVote)
+    socket.on('voteAgain', () => {
+        mainForm.removeEventListener('submit', getVote)
+    })
+})
+
+socket.on('removeVoteForm', () => {
+    vote.style.display = 'none'
 })

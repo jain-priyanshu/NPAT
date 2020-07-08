@@ -6,6 +6,7 @@ const joinPlayer = (socketId) => {
         id: socketId,
         score: null,
         room: null,
+        vote : false,
         answers: {
             name: null,
             place: null,

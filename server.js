@@ -87,6 +87,32 @@ io.on('connect', (socket) => {
             io.to(data.room).emit('getVoteForm', {order : order, room : data.room})
         }
     })
+
+    socket.on('sendVoteForm', (data) => {
+        player.vote = true
+        let score = 0
+        for(let i = 0; i < data.result_arr.length; i++){
+            if(data.result_arr[i] == true){
+                score += 5
+            }
+        }
+        var id = data.beingVoted.id
+        var index = players.findIndex((player) => player.id == id)
+        players[index].score += score
+        let c = 0
+        for(let i = 0; i < players.length; i++){
+            if(players[i].room == data.room && players[i].vote == false){
+                c++
+            }
+        }
+        if(c > 0){
+            socket.emit('removeVoteForm')
+            socket.emit('wait')
+        }
+        else{
+            socket.broadcast.to(data.room).emit('dltWait')
+        }
+    })
 })
 
 http.listen(process.env.PORT || 5000, () => {
