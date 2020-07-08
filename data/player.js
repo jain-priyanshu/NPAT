@@ -4,7 +4,7 @@ const joinPlayer = (socketId) => {
     const player = {
         name: null,
         id: socketId,
-        score: null,
+        score: 0,
         room: null,
         vote : false,
         answers: {

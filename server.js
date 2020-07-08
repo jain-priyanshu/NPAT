@@ -52,7 +52,8 @@ io.on('connect', (socket) => {
         else if(c == 3){
             socket.join(data.room)
             socket.broadcast.to(data.room).emit('dltWait')
-            io.to(data.room).emit('start', {players : players, room : data.room})
+            io.to(data.room).emit('start', {room : data.room})
+            io.to(data.room).emit('result', {players : players, room : data.room})
             io.to(data.room).emit('getMainForm', {room : data.room})
             socket.emit('removeRoomForm')
         }
@@ -108,6 +109,8 @@ io.on('connect', (socket) => {
         if(c > 0){
             socket.emit('removeVoteForm')
             socket.emit('wait')
+            io.to(data.room).emit('dltResult')
+            io.to(data.room).emit('result', {players : players, room : data.room})
         }
         else{
             for(let i = 0; i < players.length; i++){
@@ -115,6 +118,8 @@ io.on('connect', (socket) => {
                     players[i].vote = false
                 }
             }
+            io.to(data.room).emit('dltResult')
+            io.to(data.room).emit('result', {players : players, room : data.room})
             socket.broadcast.to(data.room).emit('dltWait')
             socket.emit('removeVoteForm')
             removePlayerFromOrder(id)

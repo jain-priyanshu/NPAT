@@ -53,15 +53,25 @@ socket.on('dltWait', () => {
     wait.style.display = 'none'
 })
 
-socket.on('start', (data) => {
-    roomMsg.innerHTML = `Room : ${data.room}`
+socket.on('result', (data) => {
     for(let i = 0; i < data.players.length; i++){
         if(data.players[i].room == data.room){
             const div = document.createElement('div')
-            div.innerHTML = `${data.players[i].name}`
+            div.innerHTML = `${data.players[i].name} : ${data.players[i].score}`
             nameList.appendChild(div)
         }
     }
+})
+
+socket.on('dltResult', () => {
+    let len = nameList.childNodes.length
+	for (let i = len - 1; i >= 0; i--) {
+		nameList.removeChild(nameList.childNodes[i])
+	}
+})
+
+socket.on('start', (data) => {
+    roomMsg.innerHTML = `Room : ${data.room}`
     start.style.display = 'block'
 })
 
