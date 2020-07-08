@@ -9,7 +9,8 @@ const {
     removePlayer,
     order,
     removePlayerFromOrder,
-    resetAnswers
+    resetAnswers,
+    winner
 } = require('./data/player')
 const { join } = require('path')
 const { reset } = require('nodemon')
@@ -141,10 +142,14 @@ io.on('connect', (socket) => {
                     io.to(data.room).emit('mainAgain')
                     io.to(data.room).emit('getMainForm', {room : data.room})
                     resetAnswers(data.room)
+                    io.to(data.room).emit('dltResult')
+                    io.to(data.room).emit('result', {players : players, room : data.room})
                     io.to(data.room).emit('displayMainForm')
                 }
                 else{
-                    console.log('play again?')
+                    var winner_ = winner(data.room)
+                    console.log(winner_)
+                    io.to(data.room).emit('playAgain', {winner : winner_})
                 }
             }
         }

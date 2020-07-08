@@ -19,10 +19,14 @@ var start = document.querySelector('.start')
 var vote = document.querySelector('.vote')
 var nameList = document.querySelector('.name-list')
 var roomMsg = document.querySelector('.roomMsg')
+var round = document.querySelector('.round')
 var nameVote = document.querySelector('.name-vote')
 var placeVote = document.querySelector('.place-vote')
 var animalVote = document.querySelector('.animal-vote')
 var thingsVote = document.querySelector('.things-vote')
+var winner = document.querySelector('.winner')
+var playAgain = document.querySelector('.play-again')
+var playAgainForm = document.querySelector('.play-again-form')
 
 socket.on('getRoom', () => {
     first.style.display = 'block'
@@ -56,6 +60,7 @@ socket.on('dltWait', () => {
 socket.on('result', (data) => {
     for(let i = 0; i < data.players.length; i++){
         if(data.players[i].room == data.room){
+            round.innerHTML = `Round : ${data.players[i].round}`
             const div = document.createElement('div')
             div.innerHTML = `${data.players[i].name} : ${data.players[i].score}`
             nameList.appendChild(div)
@@ -143,4 +148,9 @@ socket.on('getVoteForm', (data) => {
 
 socket.on('removeVoteForm', () => {
     vote.style.display = 'none'
+})
+
+socket.on('playAgain', (data) => {
+    winner.innerHTML = `${data.winner.name} Wins`
+    playAgain.style.display = 'block'
 })

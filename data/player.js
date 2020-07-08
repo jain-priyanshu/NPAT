@@ -26,6 +26,20 @@ function removePlayer(id) {
 	}
 }
 
+function winner(room){
+    let max = 0
+    let maxPlayer = null
+    for(let i = 0; i < players.length; i++){
+        if(players[i].room == room){
+            if(players[i].score > max){
+                maxPlayer = players[i]
+                max = players[i].score
+            }
+        }
+    }
+    return maxPlayer
+}
+
 function resetAnswers(room){
     for(let i = 0; i < players.length; i++){
         if(players[i].room == room){
@@ -51,5 +65,6 @@ module.exports = {
     removePlayer,
     order,
     removePlayerFromOrder,
-    resetAnswers
+    resetAnswers,
+    winner
 }
