@@ -116,10 +116,14 @@ socket.on('getVoteForm', (data) => {
             result_arr : [nameResult.checked, placeResult.checked, animalResult.checked, thingsResult.checked],
             room : data.room
         })
+        nameResult.checked = false
+        placeResult.checked = false
+        animalResult.checked = false
+        thingsResult.checked = false
     }
     voteForm.addEventListener('submit', getVote)
     socket.on('voteAgain', () => {
-        mainForm.removeEventListener('submit', getVote)
+        voteForm.removeEventListener('submit', getVote)
     })
 })
 

@@ -110,7 +110,27 @@ io.on('connect', (socket) => {
             socket.emit('wait')
         }
         else{
+            for(let i = 0; i < players.length; i++){
+                if(players[i].room == data.room){
+                    players[i].vote = false
+                }
+            }
             socket.broadcast.to(data.room).emit('dltWait')
+            socket.emit('removeVoteForm')
+            removePlayerFromOrder(id)
+            let remaining = 0;
+            for(let i = 0; i < order.length; i++){
+                if(order[i].room == data.room){
+                    remaining++
+                }
+            }
+            if(remaining > 0){
+                io.to(data.room).emit('voteAgain')
+                io.to(data.room).emit('getVoteForm', {order : order, room : data.room})
+            }
+            else{
+                console.log('play again?')
+            }
         }
     })
 })
