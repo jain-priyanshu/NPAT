@@ -8,9 +8,11 @@ const {
     joinPlayer,
     removePlayer,
     order,
-    removePlayerFromOrder
+    removePlayerFromOrder,
+    resetAnswers
 } = require('./data/player')
 const { join } = require('path')
+const { reset } = require('nodemon')
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -134,7 +136,16 @@ io.on('connect', (socket) => {
                 io.to(data.room).emit('getVoteForm', {order : order, room : data.room})
             }
             else{
-                console.log('play again?')
+                if(player.round < 3){
+                    io.to(data.room).emit('voteAgain')
+                    io.to(data.room).emit('mainAgain')
+                    io.to(data.room).emit('getMainForm', {room : data.room})
+                    resetAnswers(data.room)
+                    io.to(data.room).emit('displayMainForm')
+                }
+                else{
+                    console.log('play again?')
+                }
             }
         }
     })

@@ -105,6 +105,10 @@ socket.on('removeMainForm', () => {
     mainForm.style.display = 'none'
 })
 
+socket.on('displayMainForm', () => {
+    mainForm.style.display = 'block'
+})
+
 socket.on('getVoteForm', (data) => {
     let beingVoted = null;
     for(let i = 0; i < data.order.length; i++){
